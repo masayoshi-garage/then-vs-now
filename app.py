@@ -47,7 +47,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # streamlit cloud で公開するURL
-siteUrl = "";
+siteUrl = "https://then-vs-now-hya6tdrxw2qqttskcazmse.streamlit.app/";
 
 # 考えているフリ
 sleepTime = 1.5
