@@ -42,6 +42,14 @@ st.markdown("""
 .chat-row .dialogue {
     font-size: 1.1em;
     max-width: 80%;
+    color: #555;
+    margin: 1.5em 0 1.5em 15px;
+    padding: 7px 10px;
+    min-width: 120px;
+    max-width: 100%;
+    background: #e0edff;
+    border-radius: 10px;
+    border: 2px solid #c0c0c0;
 }
 </style>
 """, unsafe_allow_html=True)
