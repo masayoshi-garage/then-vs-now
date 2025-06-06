@@ -72,6 +72,10 @@ df.sort_values(by="西暦",inplace=True)
 df["西暦"] = pd.to_numeric(df["西暦"],errors="coerce")
 df["件数"] = pd.to_numeric(df["件数"],errors="coerce")
 
+df = df.dropna(subset=["西暦", "件数"])
+df["西暦"] = df["西暦"].astype(int)
+df["件数"] = df["件数"].astype(int)
+
 # 西暦の一覧を取得（重複排除＆昇順ソート）
 years = sorted(df["西暦"].dropna().unique())
 
@@ -100,7 +104,7 @@ st.markdown("""
 """)
 
 # 最小年・最大年をスライダーに設定
-selected_year = st.slider("スライドして年数を変更", int(years[0]), int(years[-2]),value=int(pd.Series(years).median()) )
+selected_year = int(st.slider("スライドして年数を変更", int(years[0]), int(years[-2]),value=int(pd.Series(years).median()) ))
 questionText = f"刑法犯が多いのは {selected_year} 年と { max_year } 年 のどっち？"
 st.subheader(questionText,divider="gray")
 
@@ -138,7 +142,11 @@ if judgment:
         oldManCount = int(df.loc[df["西暦"] == selected_year,"件数"].iloc[0])
         youngManCount = int(df.loc[df["西暦"] == max_year,"件数"].iloc[0])
 
-        if oldManCount == youngManCount:
+        if selected_year >= 1942 and selected_year <= 1945:
+            result = "…審議中…"
+            st.image('draw.png')
+            your_result = "…審議中…"
+        elif oldManCount == youngManCount:
             result = "引き分け"
             st.image('draw.png')
             if judgment == "実は同じでは？":
@@ -166,7 +174,18 @@ if judgment:
 
         # 結果出力
         st.subheader("判定 『" + result + "』 あなたの予想は 『" + your_result + "』",divider="green")
-        if result == "若者の勝利！":
+
+
+        if selected_year >= 1942 and selected_year <= 1945:
+            st.markdown(f"""
+            <div class="chat-row">
+                <img src="{get_base64_img("ojiisan04_cry.png")}">
+                <div class="dialogue">1942~1945年の統計データが取れなかったのじゃよ…<br>あの頃はのぅ…</div>
+                <img src="{get_base64_img("suit_man_cry.png")}">
+                <div class="dialogue">皆様のご苦難ご心労をお察しします。<br>統計データが残っている場合はお知らせください。<br>グラフの都合で 0 件としてプロットしています。</div>
+            </div>
+            """, unsafe_allow_html=True)
+        elif result == "若者の勝利！":
             st.markdown(f"""
             <div class="chat-row">
                 <img src="{get_base64_img("suit_man_smile.png")}">
